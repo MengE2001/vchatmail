@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1026014941926",
+    "project_id": "vchatmail-1764b",
+    "storage_bucket": "vchatmail-1764b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026014941926:android:856889b2e9ec023a09e127",
+        "android_client_info": {
+          "package_name": "com.example.vchatmail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1026014941926-mjeqmu3g1mei1eco446id0k54jq9hmt3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvnAbFtojeXG4HkZgR2LEhDhFr5pAQfJY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1026014941926-mjeqmu3g1mei1eco446id0k54jq9hmt3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
