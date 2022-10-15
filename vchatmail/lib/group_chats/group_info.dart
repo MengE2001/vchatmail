@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class GroupInfo extends StatefulWidget {
   final String groupId, groupName;
-  const GroupInfo({required this.groupId, required this.groupName, Key? key})
+  const GroupInfo({Key? key, required this.groupId, required this.groupName})
       : super(key: key);
 
   @override
@@ -17,8 +17,8 @@ class _GroupInfoState extends State<GroupInfo> {
   List membersList = [];
   bool isLoading = true;
 
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -43,11 +43,11 @@ class _GroupInfoState extends State<GroupInfo> {
   bool checkAdmin() {
     bool isAdmin = false;
 
-    membersList.forEach((element) {
+    for (var element in membersList) {
       if (element['uid'] == _auth.currentUser!.uid) {
         isAdmin = element['isAdmin'];
       }
-    });
+    }
     return isAdmin;
   }
 

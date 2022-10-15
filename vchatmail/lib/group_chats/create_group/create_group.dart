@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 class CreateGroup extends StatefulWidget {
   final List<Map<String, dynamic>> membersList;
 
-  const CreateGroup({required this.membersList, Key? key}) : super(key: key);
+  const CreateGroup({Key? key, required this.membersList}) : super(key: key);
 
   @override
   State<CreateGroup> createState() => _CreateGroupState();
@@ -104,6 +104,3 @@ class _CreateGroupState extends State<CreateGroup> {
     );
   }
 }
-
-
-//

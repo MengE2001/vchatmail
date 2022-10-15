@@ -8,7 +8,7 @@ class GroupChatHomeScreen extends StatefulWidget {
   const GroupChatHomeScreen({Key? key}) : super(key: key);
 
   @override
-  _GroupChatHomeScreenState createState() => _GroupChatHomeScreenState();
+  State<GroupChatHomeScreen> createState() => _GroupChatHomeScreenState();
 }
 
 class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {

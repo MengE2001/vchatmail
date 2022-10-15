@@ -1,0 +1,4 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}/vchatmail/linux/flutter",
+    "cmake.configureOnOpen": false
+}

@@ -1,11 +1,14 @@
 import 'package:vchatmail/Authenticate/Methods.dart';
 import 'package:flutter/material.dart';
+import 'package:vchatmail/widgets/CustomTextField.dart';
 
 import '../Screens/HomeScreen.dart';
 
 class CreateAccount extends StatefulWidget {
+  const CreateAccount({Key? key}) : super(key: key);
+
   @override
-  _CreateAccountState createState() => _CreateAccountState();
+  State<CreateAccount> createState() => _CreateAccountState();
 }
 
 class _CreateAccountState extends State<CreateAccount> {
@@ -31,21 +34,21 @@ class _CreateAccountState extends State<CreateAccount> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: size.height / 20,
+                    height: size.height / 10,
                   ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    width: size.width / 0.5,
-                    child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios), onPressed: () {}),
-                  ),
+                  // Container(
+                  //   alignment: Alignment.centerLeft,
+                  //   width: size.width / 0.5,
+                  //   child: IconButton(
+                  //       icon: Icon(Icons.arrow_back_ios), onPressed: () {}),
+                  // ),
                   SizedBox(
                     height: size.height / 50,
                   ),
                   Container(
                     width: size.width / 1.1,
                     child: Text(
-                      "Welcome",
+                      "VChatMail",
                       style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.bold,
@@ -82,15 +85,25 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 18.0),
                     child: Container(
-                      width: size.width,
+                      width: size.width / 1.1,
                       alignment: Alignment.center,
-                      child: field(size, "password", Icons.lock, _password),
+                      // child: field(size, "password", Icons.lock, _password),
+                      child: CustomTextField(
+                        size: size,
+                        hintText: "password",
+                        icon: Icons.lock,
+                        cont: _password,
+                        isPass: true,
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: size.height / 20,
                   ),
-                  customButton(size),
+                  customButton(context, size),
+                  SizedBox(
+                    height: size.height / 60,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -111,7 +124,7 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Widget customButton(Size size) {
+  Widget customButton(BuildContext context, Size size) {
     return GestureDetector(
       onTap: () {
         if (_name.text.isNotEmpty &&
@@ -128,16 +141,24 @@ class _CreateAccountState extends State<CreateAccount> {
               });
               Navigator.push(
                   context, MaterialPageRoute(builder: (_) => HomeScreen()));
-              print("Account Created Sucessfull");
+              //print("Account Created Sucessfull");
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Account Created Sucessfull')),
+              );
             } else {
-              print("Login Failed");
+              //print("Login Failed");
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Creation Failed')),
+              );
               setState(() {
                 isLoading = false;
               });
             }
           });
         } else {
-          print("Please enter Fields");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please fill form correctly')),
+          );
         }
       },
       child: Container(

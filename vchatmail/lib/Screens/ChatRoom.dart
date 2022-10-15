@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vchatmail/widgets/ShowImage.dart';
 
 class ChatRoom extends StatelessWidget {
   final Map<String, dynamic> userMap;
@@ -46,8 +47,9 @@ class ChatRoom extends StatelessWidget {
       "time": FieldValue.serverTimestamp(),
     });
 
-    var ref =
-        FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
+    var ref = FirebaseStorage.instance
+        .ref()
+        .child('images/$chatRoomId/$fileName.jpg');
 
     var uploadTask = await ref.putFile(imageFile!).catchError((error) async {
       await _firestore
@@ -57,7 +59,7 @@ class ChatRoom extends StatelessWidget {
           .doc(fileName)
           .delete();
 
-      status = 0;
+      status = 1;
     });
 
     if (status == 1) {
@@ -232,7 +234,10 @@ class ChatRoom extends StatelessWidget {
               child: Container(
                 height: size.height / 2.5,
                 width: size.width / 2,
-                decoration: BoxDecoration(border: Border.all()),
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(15),
+                ),
                 alignment: map['message'] != "" ? null : Alignment.center,
                 child: map['message'] != ""
                     ? Image.network(
@@ -246,24 +251,24 @@ class ChatRoom extends StatelessWidget {
   }
 }
 
-class ShowImage extends StatelessWidget {
-  final String imageUrl;
+// class ShowImage extends StatelessWidget {
+//   final String imageUrl;
 
-  const ShowImage({required this.imageUrl, Key? key}) : super(key: key);
+//   const ShowImage({required this.imageUrl, Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+//   @override
+//   Widget build(BuildContext context) {
+//     final Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: Container(
-        height: size.height,
-        width: size.width,
-        color: Colors.black,
-        child: Image.network(imageUrl),
-      ),
-    );
-  }
-}
+//     return Scaffold(
+//       body: Container(
+//         height: size.height,
+//         width: size.width,
+//         color: Colors.black,
+//         child: Image.network(imageUrl),
+//       ),
+//     );
+//   }
+// }
 
 //

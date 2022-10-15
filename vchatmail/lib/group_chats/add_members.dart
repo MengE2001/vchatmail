@@ -5,14 +5,14 @@ class AddMembersINGroup extends StatefulWidget {
   final String groupChatId, name;
   final List membersList;
   const AddMembersINGroup(
-      {required this.name,
-      required this.membersList,
+      {Key? key,
       required this.groupChatId,
-      Key? key})
+      required this.name,
+      required this.membersList})
       : super(key: key);
 
   @override
-  _AddMembersINGroupState createState() => _AddMembersINGroupState();
+  State<AddMembersINGroup> createState() => _AddMembersINGroupState();
 }
 
 class _AddMembersINGroupState extends State<AddMembersINGroup> {

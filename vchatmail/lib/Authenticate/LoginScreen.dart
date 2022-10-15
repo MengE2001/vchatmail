@@ -2,10 +2,13 @@ import 'package:vchatmail/Authenticate/CreateAccount.dart';
 import 'package:vchatmail/Screens/HomeScreen.dart';
 import 'package:vchatmail/Authenticate/Methods.dart';
 import 'package:flutter/material.dart';
+import 'package:vchatmail/widgets/CustomTextField.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -30,21 +33,22 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: size.height / 20,
+                    height: size.height / 10,
                   ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    width: size.width / 0.5,
-                    child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios), onPressed: () {}),
-                  ),
+                  // Container(
+                  //   alignment: Alignment.centerLeft,
+                  //   width: size.width / 0.5,
+                  //   child: IconButton(
+                  //       icon: Icon(Icons.arrow_back_ios), onPressed: () {}),
+                  // ),
                   SizedBox(
                     height: size.height / 50,
                   ),
                   Container(
+                    //alignment: Alignment.center,
                     width: size.width / 1.1,
                     child: Text(
-                      "Welcome",
+                      "VChatMail",
                       style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.bold,
@@ -68,15 +72,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: size.width,
                     alignment: Alignment.center,
-                    child: field(size, "email", Icons.account_box, _email),
+                    child: field(
+                      size,
+                      "email",
+                      Icons.account_box,
+                      _email,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 18.0),
                     child: Container(
-                      width: size.width,
-                      alignment: Alignment.center,
-                      child: field(size, "password", Icons.lock, _password),
-                    ),
+                        width: size.width / 1.1,
+                        alignment: Alignment.center,
+                        child: CustomTextField(
+                          size: size,
+                          hintText: "password",
+                          icon: Icons.lock,
+                          cont: _password,
+                          isPass: true,
+                        )),
                   ),
                   SizedBox(
                     height: size.height / 10,
@@ -114,20 +128,29 @@ class _LoginScreenState extends State<LoginScreen> {
           logIn(_email.text, _password.text).then((user) {
             if (user != null) {
               print("Login Sucessfull");
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Login Sucessfull')),
+              );
               setState(() {
                 isLoading = false;
               });
               Navigator.push(
                   context, MaterialPageRoute(builder: (_) => HomeScreen()));
             } else {
-              print("Login Failed");
+              //print("Login Failed");
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Login Failed')),
+              );
               setState(() {
                 isLoading = false;
               });
             }
           });
         } else {
-          print("Please fill form correctly");
+          //print("Please fill form correctly");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please fill form correctly')),
+          );
         }
       },
       child: Container(
@@ -150,13 +173,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget field(
-      Size size, String hintText, IconData icon, TextEditingController cont) {
+    Size size,
+    String hintText,
+    IconData icon,
+    TextEditingController cont,
+  ) {
     return Container(
       height: size.height / 14,
       width: size.width / 1.1,
       child: TextField(
         controller: cont,
         decoration: InputDecoration(
+          errorText: isLoading ? 'email not match' : null,
           prefixIcon: Icon(icon),
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.grey),
