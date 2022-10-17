@@ -45,7 +45,7 @@ class _GroupInfoState extends State<GroupInfo> {
 
     for (var element in membersList) {
       if (element['uid'] == _auth.currentUser!.uid) {
-        isAdmin = element['isAdmin'];
+        isAdmin = element['isAdmin'] == true;
       }
     }
     return isAdmin;
@@ -120,7 +120,9 @@ class _GroupInfoState extends State<GroupInfo> {
         (route) => false,
       );
     }
-  }
+  } //else{
+  //hhhhh
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -244,8 +246,9 @@ class _GroupInfoState extends State<GroupInfo> {
                               ),
                             ),
                             subtitle: Text(membersList[index]['email']),
-                            trailing: Text(
-                                membersList[index]['isAdmin'] ? "Admin" : ""),
+                            trailing: Text(membersList[index]['isAdmin'] == true
+                                ? "Admin"
+                                : ""),
                           );
                         },
                       ),

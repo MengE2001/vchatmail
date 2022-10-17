@@ -63,7 +63,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         .get()
         .then((value) {
       setState(() {
-        userMap = value.docs[0].data();
+        if (value.size > 0) {
+          userMap = value.docs[0].data();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Email not found')),
+          );
+        }
         isLoading = false;
       });
       print(userMap);
