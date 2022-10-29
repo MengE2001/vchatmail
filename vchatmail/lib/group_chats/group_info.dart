@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:vchatmail/Screens/HomeScreen.dart';
 import 'package:vchatmail/group_chats/add_members.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class GroupInfo extends StatefulWidget {
   final String groupId, groupName;
@@ -16,6 +20,7 @@ class GroupInfo extends StatefulWidget {
 class _GroupInfoState extends State<GroupInfo> {
   List membersList = [];
   bool isLoading = true;
+  File? imageFile;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -72,6 +77,9 @@ class _GroupInfoState extends State<GroupInfo> {
       setState(() {
         isLoading = false;
       });
+
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => super.widget));
     });
   }
 
@@ -79,17 +87,89 @@ class _GroupInfoState extends State<GroupInfo> {
     if (checkAdmin()) {
       if (_auth.currentUser!.uid != membersList[index]['uid']) {
         showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: ListTile(
-                  onTap: () => removeMembers(index),
-                  title: Text("Remove This Member"),
-                ),
-              );
-            });
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: ListTile(
+                onTap: () => removeMembers(index),
+                title: Text("Remove This Member"),
+              ),
+            );
+          },
+        );
       }
     }
+  }
+
+  void _getFromCamera() async {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    // _cropImage(pickedFile!.path);
+    Navigator.pop(context);
+  }
+
+  void _getFromGallery() async {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+  }
+
+  void _cropImage(filePath) async {
+    CroppedFile? croppedImage = await ImageCropper()
+        .cropImage(sourcePath: filePath, maxHeight: 1080, maxWidth: 1080);
+    if (croppedImage != null) {
+      setState(() {
+        imageFile = File(croppedImage.path);
+      });
+    }
+  }
+
+  // Future uploadImage() async {
+  //   String fileName = Uuid().v1();
+  //   int status = 1;
+
+  //   await _firestore
+  //       .collection('chatroom')
+  //       .doc()
+  //       .collection('chats')
+  //       .doc(fileName)
+  //       .set({
+  //     "sendby": _auth.currentUser!.displayName,
+  //     "message": "",
+  //     "type": "img",
+  //     "time": FieldValue.serverTimestamp(),
+  //   });
+
+  //   var ref = FirebaseStorage.instance
+  //       .ref()
+  //       .child('profile/$GroupInfo/$fileName.jpg');
+
+  //   var uploadTask = await ref.putFile(imageFile!).catchError((error) async {
+  //     await _firestore
+  //         .collection('chatroom')
+  //         .doc(chatRoomId)
+  //         .collection('chats')
+  //         .doc(fileName)
+  //         .delete();
+
+  //     status = 1;
+  //   });
+
+  //   if (status == 1) {
+  //     String imageUrl = await uploadTask.ref.getDownloadURL();
+
+  //     await _firestore
+  //         .collection('chatroom')
+  //         .doc(g)
+  //         .collection('chats')
+  //         .doc(fileName)
+  //         .update({"message": imageUrl});
+
+  //     print(imageUrl);
+  //   }
+  // }
+
+  void GroupProfile() async {
+    await _firestore.collection('groups').doc(widget.groupId).update({});
   }
 
   Future onLeaveGroup() async {
@@ -119,10 +199,25 @@ class _GroupInfoState extends State<GroupInfo> {
         MaterialPageRoute(builder: (_) => HomeScreen()),
         (route) => false,
       );
+    } else {
+      //print("ey muy");
+      await _firestore.collection('groups').doc(widget.groupId).update({
+        "members": membersList,
+      });
+
+      await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .collection('groups')
+          .doc(widget.groupId)
+          .delete();
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => HomeScreen()),
+        (route) => false,
+      );
     }
-  } //else{
-  //hhhhh
-  //}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,17 +245,42 @@ class _GroupInfoState extends State<GroupInfo> {
                       width: size.width / 1.1,
                       child: Row(
                         children: [
-                          Container(
-                            height: size.height / 11,
-                            width: size.height / 11,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey,
-                            ),
-                            child: Icon(
-                              Icons.group,
-                              color: Colors.white,
-                              size: size.width / 10,
+                          // Container(
+                          //   height: size.height / 11,
+                          //   width: size.height / 11,
+                          //   decoration: BoxDecoration(
+                          //     shape: BoxShape.circle,
+                          //     color: Colors.grey,
+                          //   ),
+                          //   child: Icon(
+                          //     Icons.group,
+                          //     color: Colors.white,
+                          //     size: size.width / 10,
+                          //   ),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: _getFromCamera,
+                              onLongPress: _getFromGallery,
+                              child: Container(
+                                width: size.width * 0.22,
+                                height: size.height * 0.3,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.cyanAccent,
+                                  ),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.network(
+                                    'https://media.istockphoto.com/vectors/camera-icon-in-trendy-flat-style-isolated-on-white-background-vector-id1384311753?k=20&m=1384311753&s=612x612&w=0&h=Ed3wBUKWIwxKzD5ODrifUTNXJ0zpkkDeIIgHJ-j5gmg=',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           SizedBox(

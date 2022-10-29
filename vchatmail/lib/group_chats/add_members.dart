@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vchatmail/group_chats/group_info.dart';
 
 class AddMembersINGroup extends StatefulWidget {
   final String groupChatId, name;
@@ -40,7 +42,13 @@ class _AddMembersINGroupState extends State<AddMembersINGroup> {
         .get()
         .then((value) {
       setState(() {
-        userMap = value.docs[0].data();
+        if (value.size > 0) {
+          userMap = value.docs[0].data();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Email not found')),
+          );
+        }
         isLoading = false;
       });
       print(userMap);
@@ -60,6 +68,9 @@ class _AddMembersINGroupState extends State<AddMembersINGroup> {
         .collection('groups')
         .doc(widget.groupChatId)
         .set({"name": widget.name, "id": widget.groupChatId});
+
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) => super.widget));
   }
 
   @override
