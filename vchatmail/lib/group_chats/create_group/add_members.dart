@@ -96,7 +96,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Members"),
+        title: Text("Create Group"),
       ),
       body: SingleChildScrollView(
         child: Column(

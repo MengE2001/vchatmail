@@ -73,7 +73,7 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
               },
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.create),
+        child: Icon(Icons.add_circle),
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => AddMembersInGroup(),
