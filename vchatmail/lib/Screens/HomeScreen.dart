@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:vchatmail/Authenticate/Autheticate.dart';
 import 'package:vchatmail/Authenticate/LoginScreen.dart';
 import 'package:vchatmail/Screens/ChatRoom.dart';
 import 'package:vchatmail/group_chats/group_chat_screen.dart';
-import 'package:vchatmail/Screens/user_info.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -86,11 +87,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         title: Text("Home Screen"),
         actions: [
           IconButton(
-              onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => LoginScreen(),
-                    ),
-                  ),
+              onPressed: () async {
+                await _auth.signOut();
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => LoginScreen()));
+              },
               icon: Icon(Icons.logout)),
         ],
       ),
