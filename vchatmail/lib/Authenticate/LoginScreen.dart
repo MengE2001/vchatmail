@@ -134,8 +134,11 @@ class _LoginScreenState extends State<LoginScreen> {
               setState(() {
                 isLoading = false;
               });
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => HomeScreen()));
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => HomeScreen()),
+                (_) => false,
+              );
             } else {
               //print("Login Failed");
               ScaffoldMessenger.of(context).showSnackBar(

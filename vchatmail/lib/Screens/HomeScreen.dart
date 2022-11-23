@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vchatmail/Authenticate/LoginScreen.dart';
 import 'package:vchatmail/Screens/ChatRoom.dart';
 import 'package:vchatmail/group_chats/group_chat_screen.dart';
 import 'package:vchatmail/Screens/user_info.dart';
@@ -87,10 +88,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           IconButton(
               onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => const UserInfoScreen(),
+                      builder: (_) => LoginScreen(),
                     ),
                   ),
-              icon: Icon(Icons.more_vert)),
+              icon: Icon(Icons.logout)),
         ],
       ),
       // appBar: AppBar(

@@ -139,8 +139,11 @@ class _CreateAccountState extends State<CreateAccount> {
               setState(() {
                 isLoading = false;
               });
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => HomeScreen()));
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => HomeScreen()),
+                (_) => false,
+              );
               //print("Account Created Sucessfull");
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Account Created Sucessfull')),
